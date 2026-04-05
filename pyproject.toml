@@ -1,0 +1,107 @@
+[build-system]
+requires = ["setuptools>=61.0", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "lida"
+readme = "README.md"
+version = "0.1.0"
+description = "LIDA: Automatic Generation of Visualizations from Data using LLMs"
+license = { text = "MIT" }
+authors = [
+  { name = "Victor Dibia", email = "victordibia@microsoft.com" },
+]
+maintainers = [
+  { name = "LIDA Contributors" },
+]
+requires-python = ">=3.9"
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Visualization",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+keywords = ["visualization", "llm", "gpt", "openai", "data-science", "matplotlib", "altair", "infographics"]
+
+dependencies = [
+    "openai>=1.0",
+    "tiktoken",
+    "diskcache",
+    "python-dotenv>=1.0",
+    "pydantic>=2.0",
+    "uvicorn[standard]>=0.23",
+    "typer>=0.9",
+    "fastapi>=0.100",
+    "python-multipart>=0.0.6",
+    "scipy>=1.10",
+    "numpy>=1.24",
+    "pandas>=2.0",
+    "matplotlib>=3.7",
+    "altair>=5.0",
+    "seaborn>=0.12",
+    "plotly>=5.15",
+    "plotnine>=0.10",
+    "statsmodels>=0.14",
+    "networkx>=3.1",
+    "geopandas>=0.13",
+    "matplotlib-venn>=0.1.1",
+    "wordcloud>=1.9",
+    "kaleido>=0.2.1,!=0.2.1.post1",
+]
+
+[project.optional-dependencies]
+web = ["fastapi[standard]>=0.100", "uvicorn[standard]>=0.23"]
+gemini = ["google-genai>=0.3"]
+anthropic = ["anthropic>=0.5"]
+tools = ["geopy>=2.4", "basemap>=1.3", "basemap-data-hires>=1.3"]
+infographics = ["peacasso>=0.1"]
+dev = [
+    "pytest>=7.4",
+    "pytest-asyncio>=0.21",
+    "pytest-cov>=4.1",
+    "black>=23.0",
+    "isort>=5.12",
+    "mypy>=1.5",
+    "pre-commit>=3.3",
+]
+
+[project.urls]
+Homepage = "https://github.com/arian47/lida"
+Repository = "https://github.com/arian47/lida"
+Documentation = "https://github.com/arian47/lida#readme"
+"Bug Tracker" = "https://github.com/arian47/lida/issues"
+Changelog = "https://github.com/arian47/lida/releases"
+Discussions = "https://github.com/arian47/lida/discussions"
+
+[project.scripts]
+lida = "lida.cli:run"
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.dynamic]
+version = {attr = "lida.version.VERSION"}
+readme = {file = ["README.md"]}
+
+[tool.setuptools.packages.find]
+include = ["lida*"]
+exclude = ["*.tests*"]
+namespaces = false
+
+[tool.setuptools.package-data]
+"lida" = ["*.*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+asyncio_mode = "auto"
