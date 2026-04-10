@@ -8,9 +8,12 @@ Supports OpenAI, Google Gemini, Anthropic Claude, MiniMax, and any OpenAI-compat
 import os
 from pathlib import Path
 
-from dotenv import load_dotenv
+from dotenv import load_dotenv, find_dotenv
 
-# Load .env from the project root (walk up from this file to find it)
+# Search for .env starting from the current working directory
+load_dotenv(find_dotenv(usecwd=True), override=False)
+
+# Fallback: Load .env from the project root (walk up from this file to find it)
 _env_path = Path(__file__).resolve().parents[2] / ".env"
 if _env_path.exists():
     load_dotenv(_env_path, override=False)

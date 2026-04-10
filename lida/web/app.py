@@ -13,7 +13,10 @@ from ..components import Manager
 
 
 # instantiate model and generator
-textgen = llm()
+# Use LIDA_PROVIDER env var to specify provider (e.g. "minimax", "openai", "gemini").
+# Defaults to "openai" if not set.
+_provider = os.environ.get("LIDA_PROVIDER", None)
+textgen = llm(provider=_provider)
 logger = logging.getLogger("lida")
 api_docs = os.environ.get("LIDA_API_DOCS", "False") == "True"
 
@@ -230,6 +233,17 @@ async def health_check():
     return {"status": "healthy", "service": "lida"}
 
 
+@api.get("/datafiles")
+async def list_data_files():
+    """List available data files in the files/data directory."""
+    try:
+        files = [f for f in os.listdir(data_folder) if f.endswith(('.csv', '.json'))]
+        return {"status": True, "files": sorted(files)}
+    except Exception as e:
+        logger.error(f"Error listing data files: {e}")
+        return {"status": False, "files": [], "message": str(e)}
+
+
 @api.post("/summarize")
 async def upload_file(file: UploadFile):
     """ Upload a file and return a summary of the data """
@@ -260,7 +274,8 @@ async def upload_file(file: UploadFile):
         return {"status": True, "summary": summary, "data_filename": file.filename}
     except Exception as exception_error:
         logger.error(f"Error processing file: {str(exception_error)}")
-        return {"status": False, "message": f"Error processing file."}
+        logger.error(traceback.format_exc())
+        return {"status": False, "message": f"Error processing file: {str(exception_error)}"}
 
 
 # upload via url

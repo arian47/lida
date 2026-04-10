@@ -106,13 +106,13 @@ class Summarizer():
         response = text_gen.generate(messages=messages, config=textgen_config)
         enriched_summary = base_summary
         try:
-            json_string = clean_code_snippet(response.text[0]["content"])
+            json_string = clean_code_snippet(response.text[0].content)
             enriched_summary = json.loads(json_string)
-        except json.decoder.JSONDecodeError:
-            error_msg = f"The model did not return a valid JSON object while attempting to generate an enriched data summary. Consider using a default summary or  a larger model with higher max token length. | {response.text[0]['content']}"
-            logger.info(error_msg)
-            print(response.text[0]["content"])
-            raise ValueError(error_msg + "" + response.usage)
+        except (json.decoder.JSONDecodeError, Exception) as e:
+            logger.warning(f"Enrichment failed ({e}), using base summary instead.")
+            logger.info(f"Raw response content: {response.text[0].content}")
+            # Return base_summary rather than crashing - enrichment is optional
+            return base_summary
         return enriched_summary
 
     def summarize(

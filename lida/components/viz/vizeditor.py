@@ -41,4 +41,4 @@ class VizEditor(object):
 
         completions: TextGenerationResponse = text_gen.generate(
             messages=messages, config=textgen_config)
-        return [x['content'] for x in completions.text]
+        return [x.content for x in completions.text]

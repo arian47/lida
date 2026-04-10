@@ -48,7 +48,7 @@ class VizExplainer(object):
         completions: TextGenerationResponse = text_gen.generate(
             messages=messages, config=textgen_config)
 
-        completions = [clean_code_snippet(x['content']) for x in completions.text]
+        completions = [clean_code_snippet(x.content) for x in completions.text]
         explanations = []
 
         for completion in completions:

@@ -77,7 +77,7 @@ class VizRecommender(object):
         result: TextGenerationResponse = text_gen.generate(
             messages=messages, config=textgen_config)
         output = []
-        snippets = result.text[0]["content"].split("*****")
+        snippets = result.text[0].content.split("*****")
         for snippet in snippets:
             cleaned_snippet = clean_code_snippet(snippet)
             if len(cleaned_snippet) > 4:

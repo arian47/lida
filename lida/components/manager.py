@@ -56,6 +56,12 @@ class Manager(object):
         Args:
             config (TextGenerationConfig): Text generation configuration.
         """
+        # Override frontend provider if LIDA_PROVIDER is explicitly set globally
+        env_provider = os.environ.get("LIDA_PROVIDER")
+        if env_provider and config.provider != env_provider:
+            logger.info(f"Overriding frontend provider {config.provider} with globally configured {env_provider}")
+            config.provider = env_provider
+
         if config.provider is None:
             config.provider = self.text_gen.provider or "openai"
             logger.info("Provider is not set, using default provider - %s", config.provider)
@@ -197,7 +203,8 @@ class Manager(object):
             goal = Goal(**goal)
         if isinstance(goal, str):
             goal = Goal(question=goal, visualization=goal, rationale="")
-
+        if isinstance(summary, dict):
+            summary = Summary(**summary)
         self.check_textgen(config=textgen_config)
         code_specs = self.vizgen.generate(
             summary=summary, goal=goal, textgen_config=textgen_config, text_gen=self.text_gen,

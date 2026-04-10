@@ -1,44 +1,48 @@
-# LIDA: Automatic Generation of Visualizations and Infographics using Large Language Models
+<div align="center">
+  <h1>📊 LIDA</h1>
+  <p><b>Automatic Generation of Visualizations and Infographics using Large Language Models</b></p>
 
-[![PyPI version](https://badge.fury.io/py/lida.svg)](https://badge.fury.io/py/lida)
-[![arXiv](https://img.shields.io/badge/arXiv-2303.02927-<COLOR>.svg)](https://arxiv.org/abs/2303.02927)
-![PyPI - Downloads](https://img.shields.io/pypi/dm/lida?label=pypi%20downloads)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+  [![PyPI version](https://badge.fury.io/py/lida.svg)](https://badge.fury.io/py/lida)
+  [![arXiv](https://img.shields.io/badge/arXiv-2303.02927-b31b1b.svg)](https://arxiv.org/abs/2303.02927)
+  ![PyPI - Downloads](https://img.shields.io/pypi/dm/lida?label=downloads&color=green)
+  [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+</div>
 
-<a target="_blank" href="https://colab.research.google.com/github/microsoft/lida/blob/main/notebooks/tutorial.ipynb">
-<img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/>
-</a>
+<br/>
 
-LIDA is a library for generating data visualizations and data-faithful infographics. LIDA is grammar agnostic (will work with any programming language and visualization libraries e.g. matplotlib, seaborn, altair, d3 etc) and works with multiple large language model providers (OpenAI, Azure OpenAI, Google Gemini, Anthropic Claude, MiniMax, and other OpenAI-compatible endpoints). Details on the components of LIDA are described in the [paper](https://arxiv.org/abs/2303.02927) and in this tutorial [notebook](notebooks/tutorial.ipynb).
+LIDA is a grammar-agnostic library for generating data visualizations and data-faithful infographics. It works seamlessly with any programming language and visualization library (e.g., **matplotlib, seaborn, altair, d3, plotly**) and natively supports multiple Large Language Model (LLM) providers.
 
 > **Note on Code Execution:**
-> To create visualizations, LIDA _generates_ and _executes_ code.
-> Ensure that you run LIDA in a secure environment.
+> To create visualizations, LIDA _generates_ and _executes_ Python code. Please ensure that you run LIDA in a securely sandboxed or trusted environment.
 
-## Features
+---
 
-LIDA treats _**visualizations as code**_ and provides a clean API for generating, executing, editing, explaining, evaluating and repairing visualization code.
+## 🌟 What's New in the Re-Engineered Version?
 
-- [x] Data Summarization
-- [x] Goal Generation
-- [x] Goal Exploration with Personas
-- [x] Visualization Generation
-- [x] Visualization Editing
-- [x] Visualization Explanation
-- [x] Visualization Evaluation and Repair
-- [x] Visualization Recommendation
-- [x] Infographic Generation (beta)
+This enhanced branch of LIDA has been heavily re-engineered for better stability, removing external bloated dependencies and bringing LLM integration securely in-house!
 
-```python
-from lida import Manager, llm
+- **Deprecation of `llmx`:** We stripped out the external `llmx` dependency. LIDA now utilizes a powerful, native, drop-in replacement built directly into `lida.llm`.
+- **Broader Provider Support:** First-class, built-in support for **OpenAI, Azure OpenAI, Google Gemini, Anthropic Claude, and MiniMax**, as well as any OpenAI-compatible API endpoint.
+- **Robust Environment Loading:** Configurations and API Keys are safely and dynamically loaded from your local `.env` files, natively propagating to both the UI and the Python environments.
 
-lida = Manager(text_gen=llm("openai"))
-summary = lida.summarize("data/cars.csv")
-goals = lida.goals(summary, n=2)
-charts = lida.visualize(summary=summary, goal=goals[0])
-```
+---
 
-## Installation
+## ✨ Core Features
+
+LIDA treats _**visualizations as code**_ and provides a unified, clean API specifically built to handle the end-to-end pipeline:
+
+- **📦 Data Summarization:** Create compact but rich semantic dataset profiles.
+- **🎯 Goal Generation:** Automatically identify analytics targets and data questions.
+- **🎭 Persona Exploration:** Tailor analytic goals by user-specific roles (e.g., Executive vs. Data Scientist).
+- **📈 Visualization Generation:** Draft perfectly formatted visualization code.
+- **⚙️ Visualization Editing:** Morph and tweak charts via natural language commands.
+- **💬 Visualization Explanation:** Generate plain-english breakdowns of complex charts.
+- **🔧 Evaluation & Repair:** Self-correct bugs or syntax errors in charting libraries.
+- **🎨 Infographic Generation:** Transform standard plots into stylized art (*beta*).
+
+---
+
+## 🚀 Installation
 
 ### Standard Installation
 
@@ -56,149 +60,115 @@ pip install -e ".[dev]"
 
 ### Optional Dependencies
 
+You can customize your installation based on the providers and tools you intend to use:
+
 ```bash
-# For web UI
-pip install lida[web]
+pip install lida[web]            # For the Web GUI (FastAPI & React)
+pip install lida[gemini]         # For Google Gemini support
+pip install lida[anthropic]      # For Anthropic Claude support
+pip install lida[infographics]   # For AI infographic generation (Peacasso)
 
-# For Google Gemini support
-pip install lida[gemini]
-
-# For Anthropic Claude support
-pip install lida[anthropic]
-
-# For infographic generation
-pip install lida[infographics]
-
-# For all optional dependencies
+# Or grab everything:
 pip install lida[web,gemini,anthropic,infographics]
 ```
 
-## Supported LLM Providers
+---
 
-| Provider | Models | Environment Variable |
-|----------|--------|---------------------|
-| OpenAI | GPT-4, GPT-3.5 Turbo | `OPENAI_API_KEY` |
-| Azure OpenAI | GPT-4, GPT-3.5 Turbo | `AZURE_OPENAI_API_KEY` |
-| Google Gemini | Gemini Pro | `GOOGLE_API_KEY` |
-| Anthropic | Claude 3 Opus, Claude 3 Sonnet | `ANTHROPIC_API_KEY` |
-| MiniMax | MiniMax M2 | `MINIMAX_API_KEY` |
-| OpenAI Compatible | Any OpenAI-compatible endpoint | `OPENAI_API_BASE` |
+## 🔐 Environment Setup
 
-## Supported Visualization Libraries
+To use LIDA, you must provide the API keys for the providers you wish to utilize. LIDA loads these automatically from your environment or a `.env` file!
 
-- matplotlib
-- seaborn
-- altair
-- plotly
-- plotnine (ggplot2 port)
-- Any other library representable as code
+Create a `.env` file in the root of your project:
 
-## Quick Start
+```env
+# Define which provider LIDA UI should default to (e.g., openai, minimax, gemini, anthropic)
+LIDA_PROVIDER=minimax
 
-### Python API
+# --- OpenAI / Azure OpenAI ---
+OPENAI_API_KEY=your_openai_key
+OPENAI_API_BASE=
+OPENAI_API_TYPE=
+
+# --- Google Gemini ---
+GOOGLE_API_KEY=your_gemini_key
+
+# --- Anthropic Claude ---
+ANTHROPIC_API_KEY=your_anthropic_key
+
+# --- MiniMax ---
+MINIMAX_API_KEY=your_minimax_key
+MINIMAX_API_MODE=anthropic
+```
+
+---
+
+## 🖥️ Using LIDA: The Web GUI
+
+LIDA ships with a beautiful, fully-featured interactive React Single Page Application (SPA). This is the fastest way to get started and allows you to upload datasets, select models dynamically, and generate visualizations entirely visually.
+
+> **Important:** Ensure you have configured `LIDA_PROVIDER` correctly in your `.env` file so the backend boots with your active API key.
+
+Start the User Interface:
+```bash
+lida ui --port=8080 --docs
+```
+Navigate to `http://localhost:8080/` in your browser.
+
+---
+
+## 🐍 Using LIDA: Python API (Non-GUI)
+
+If you're building a data-pipeline, integrating LIDA into a Jupyter Notebook, or writing an autonomous data agent, use the Python API. 
+
+The primary entry point is the `Manager` class.
 
 ```python
 from lida import Manager, llm
 
-# Initialize with OpenAI
-lida = Manager(text_gen=llm("openai"))
+# Instantiate the manager. LIDA will automatically pick up API keys from your .env!
+# You can swap out "openai" for "gemini", "anthropic", or "minimax"
+text_generator = llm("minimax")
+lida = Manager(text_gen=text_generator)
 
-# Summarize data
+# 1. Summarize the dataset
 summary = lida.summarize("data/cars.csv")
 
-# Generate visualization goals
+# 2. Generate insightful visualization goals
 goals = lida.goals(summary, n=5)
 
-# Generate visualizations
-charts = lida.visualize(summary=summary, goal=goals[0], library="matplotlib")
-```
-
-### Web API and UI
-
-```bash
-lida ui --port=8080 --docs
-```
-
-Navigate to http://localhost:8080/ in your browser.
-
-### Docker
-
-```bash
-docker compose up
-```
-
-## Documentation
-
-### Core Concepts
-
-#### Data Summarization
-
-Given a dataset, generate a compact summary of the data.
-
-```python
-summary = lida.summarize("data/cars.json")
-```
-
-#### Goal Generation
-
-Generate visualization goals given a data summary.
-
-```python
-goals = lida.goals(summary, n=5, persona="data analyst")
-```
-
-#### Visualization Generation
-
-Generate, refine, execute and filter visualization code.
-
-```python
+# 3. Generate a chart addressing the first Goal using Seaborn
 charts = lida.visualize(
     summary=summary, 
     goal=goals[0], 
-    library="matplotlib"
+    library="seaborn"
 )
+
+# Render the code!
+print(charts[0].code)
 ```
 
-#### Visualization Editing
-
-Edit visualizations using natural language.
+Other useful core modules to play with from the Python side:
 
 ```python
-edited_charts = lida.edit(
-    code=code,
-    summary=summary,
-    instructions=["convert to bar chart", "change color to red"],
-    library="matplotlib"
-)
-```
+# Edit an existing visualization
+edited_charts = lida.edit(code=charts[0].code, summary=summary, instructions=["change the bars to red"])
 
-#### Visualization Explanation
-
-Generate natural language explanations of visualization code.
-
-```python
+# Explain a complex plot
 explanation = lida.explain(code=charts[0].code, summary=summary)
+
+# Repair broken charts (using stack traces or feedback)
+repaired = lida.repair(code=broken_code, goal=goals[0], summary=summary, feedback="NameError: name 'sns' is not defined")
 ```
 
-#### Visualization Evaluation
+---
 
-Evaluate visualizations and get repair suggestions.
+## 🤝 Contributing
 
-```python
-evaluations = lida.evaluate(code=code, goal=goals[i], library="matplotlib")
-```
+Contributions are completely welcome! Please see our contributing guidelines for information on preparing your PR routines and setting up the development framework.
 
-## API Reference
+## 📖 Citation
 
-See the full API documentation for detailed information on all methods and parameters.
-
-## Contributing
-
-Contributions are welcome! Please see our contributing guidelines for more information.
-
-## Citation
-
-If you use LIDA in your research, please cite:
+If you use LIDA in your research, please cite the core paper:
 
 ```bibtex
 @article{dibia2023lida,
@@ -215,6 +185,6 @@ If you use LIDA in your research, please cite:
 }
 ```
 
-## License
+## ⚖️ License
 
 MIT License - see [LICENSE](LICENSE) for details.

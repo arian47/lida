@@ -38,15 +38,15 @@ class PersonaExplorer():
         result = text_gen.generate(messages=messages, config=textgen_config)
 
         try:
-            json_string = clean_code_snippet(result.text[0]["content"])
+            json_string = clean_code_snippet(result.text[0].content)
             result = json.loads(json_string)
             # cast each item in the list to a Goal object
             if isinstance(result, dict):
                 result = [result]
             result = [Persona(**x) for x in result]
         except json.decoder.JSONDecodeError:
-            logger.info(f"Error decoding JSON: {result.text[0]['content']}")
-            print(f"Error decoding JSON: {result.text[0]['content']}")
+            logger.info(f"Error decoding JSON: {result.text[0].content}")
+            print(f"Error decoding JSON: {result.text[0].content}")
             raise ValueError(
                 "The model did not return a valid JSON object while attempting generate personas.  Consider using a larger model or a model with higher max token length.")
         return result

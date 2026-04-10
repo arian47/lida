@@ -35,6 +35,6 @@ class VizGenerator(object):
 
         completions: TextGenerationResponse = text_gen.generate(
             messages=messages, config=textgen_config)
-        response = [x['content'] for x in completions.text]
+        response = [x.content for x in completions.text]
 
         return response
